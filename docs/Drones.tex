@@ -12,8 +12,9 @@
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{verbatim}
+\usepackage[unicode]{hyperref}
 
-\title{Комплексная система роевых дронов: потоки данных и навигация в условиях радиоэлектронного подавления}
+\title{Comprehensive Swarm Drone System: Data Flows and Navigation in Radio Electronic Jamming Conditions}
 \author{}
 \date{June 15, 2025}
 
@@ -24,58 +25,59 @@
 \tableofcontents
 \newpage
 
-% PART I: ORIGINAL RUSSIAN CONTENT
-\part{Потоки данных в рое дронов}
+% PART I: DATA FLOWS IN DRONE SWARM
+\section*{Part I: Data Flows in Drone Swarm}
+\addcontentsline{toc}{section}{Part I: Data Flows in Drone Swarm}
 
-\section{Краткий обзор системы}
+\section{System Overview}
 
-Разрабатываемая система представляет собой рой из 100 автономных дронов, организованных в трёхуровневую иерархическую структуру. Основная задача --- проведение разведки, картографирование и передача данных в условиях отсутствия радиочастотной связи, с минимальной уязвимостью к обнаружению. Для обеспечения эффективного взаимодействия между уровнями используются лазерные и инфракрасные технологии связи с приоритетом прямой видимости. 
+The developed system represents a swarm of 100 autonomous drones organized in a three-level hierarchical structure. The main objective is conducting reconnaissance, mapping, and data transmission in conditions of radio frequency communication absence, with minimal vulnerability to detection. To ensure effective interaction between levels, laser and infrared communication technologies with line-of-sight priority are used.
 
-Каждый уровень выполняет специализированные функции:
+Each level performs specialized functions:
 \begin{itemize}
-    \item \textbf{Уровень 1 (Командный)} --- высокомощные дроны с LIDAR-сенсорами и средствами связи с базой.
-    \item \textbf{Уровень 2 (Связной)} --- промежуточные дроны-ретрансляторы и маяки навигации.
-    \item \textbf{Уровень 3 (Рабочий)} --- малые дроны, отвечающие за разведку на местности.
+    \item \textbf{Level 1 (Command)} --- high-power drones with LIDAR sensors and base communication capabilities.
+    \item \textbf{Level 2 (Relay)} --- intermediate relay drones and navigation beacons.
+    \item \textbf{Level 3 (Worker)} --- small drones responsible for ground reconnaissance.
 \end{itemize}
 
-Система также способна интегрироваться с внешними FPV-ударными дронами, которым оперативно передаются разведданные для последующего принятия решений о поражении целей.
+The system is also capable of integrating with external FPV strike drones, to which reconnaissance data is promptly transmitted for subsequent target engagement decisions.
 
-\section{Интеграция с системами НАТО и Украины}
+\section{Integration with NATO and Ukraine Systems}
 
-Для обеспечения совместимости с существующей архитектурой НАТО и ВСУ, система роя должна поддерживать следующие интерфейсы, протоколы и стандарты:
+To ensure compatibility with existing NATO and AFU (Armed Forces of Ukraine) architecture, the swarm system must support the following interfaces, protocols, and standards:
 
-\subsection{Тактические и стратегические системы НАТО}
+\subsection{NATO Tactical and Strategic Systems}
 \begin{itemize}
-    \item \textbf{Link 16} --- тактическая цифровая сеть передачи данных. Интеграция через шлюзы с поддержкой IP-туннелирования или JREAP.
-    \item \textbf{JREAP-C} --- расширение Link 16 через IP. Возможность ретрансляции разведданных с командных дронов (уровень 1) через наземную станцию.
-    \item \textbf{STANAG 4586} --- стандарт взаимодействия с БПЛА. Поддержка интерфейса обмена командами и телеметрией.
-    \item \textbf{STANAG 4609 / 4545} --- форматы видео- и разведданных (ISR). Используются для передачи потоков с камер и лидаров.
-    \item \textbf{FMN (Federated Mission Networking)} --- общая миссионная сеть НАТО. Поддержка федеративной маршрутизации и метаданных.
-    \item \textbf{MAJIIC II / MAJIIC III} --- архитектура многонационального обмена разведданными. Возможность автоматической маршрутизации целевых координат и событий.
+    \item \textbf{Link 16} --- tactical digital data transmission network. Integration through gateways with IP tunneling or JREAP support.
+    \item \textbf{JREAP-C} --- Link 16 extension over IP. Capability to relay intelligence data from command drones (level 1) through ground station.
+    \item \textbf{STANAG 4586} --- UAV interaction standard. Support for command and telemetry exchange interface.
+    \item \textbf{STANAG 4609 / 4545} --- video and intelligence data formats (ISR). Used for transmitting streams from cameras and lidars.
+    \item \textbf{FMN (Federated Mission Networking)} --- NATO common mission network. Support for federated routing and metadata.
+    \item \textbf{MAJIIC II / MAJIIC III} --- multinational intelligence exchange architecture. Capability for automatic routing of target coordinates and events.
 \end{itemize}
 
-\subsection{Системы ВСУ и украинские боевые интерфейсы}
+\subsection{AFU Systems and Ukrainian Combat Interfaces}
 \begin{itemize}
-    \item \textbf{Delta (Дельта)} --- C4ISR-платформа украинского производства. Требуется REST API, JSON-совместимый, с передачей координат целей и карт.
-    \item \textbf{Kropyva (Кропива)} --- цифровая система управления артиллерией. Интеграция возможна через экспорт координат целей в формате UTM/LL.
-    \item \textbf{GIS Arta / ArtOS} --- геоинформационные системы огневого управления. Поддержка передачи разведданных по UDP/TCP через API шлюзы.
-    \item \textbf{REDCON / BMS платформы} --- тактические интерфейсы управления. Поддержка взаимодействия через MQTT/BROKER слои и защищённые API.
-    \item \textbf{FPV-контроллеры нового поколения} --- взаимодействие через мобильные командные станции или роевые хабы, передающие целеуказание в реальном времени.
+    \item \textbf{Delta} --- Ukrainian-made C4ISR platform. Requires REST API, JSON-compatible, with target coordinates and map transmission.
+    \item \textbf{Kropyva} --- digital artillery control system. Integration possible through target coordinate export in UTM/LL format.
+    \item \textbf{GIS Arta / ArtOS} --- fire control geoinformation systems. Support for intelligence data transmission via UDP/TCP through API gateways.
+    \item \textbf{REDCON / BMS platforms} --- tactical control interfaces. Support for interaction through MQTT/BROKER layers and secure API.
+    \item \textbf{New generation FPV controllers} --- interaction through mobile command stations or swarm hubs transmitting real-time targeting.
 \end{itemize}
 
-\textbf{Примечание:} Все интерфейсы должны быть реализованы через трансляторы, шлюзы или контейнеризированные API-прокси, размещённые на командных дронах или наземных станциях. Приоритет --- совместимость, масштабируемость и безопасность.
+\textbf{Note:} All interfaces must be implemented through translators, gateways, or containerized API proxies deployed on command drones or ground stations. Priority --- compatibility, scalability, and security.
 
-\section{Архитектура шлюзов и API-взаимодействие}
-\subsection{Схема шлюзовой архитектуры}
+\section{Gateway Architecture and API Interaction}
+\subsection{Gateway Architecture Diagram}
 \begin{center}
 \begin{tikzpicture}[node distance=2.5cm, every node/.style={draw, align=center, minimum width=3.5cm, minimum height=1.2cm}]
-\node (drone) {\textbf{Командный дрон (Ур. 1)}};
-\node[right=of drone] (gateway) {\textbf{Универсальный шлюз}};
+\node (drone) {\textbf{Command Drone (Lv. 1)}};
+\node[right=of drone] (gateway) {\textbf{Universal Gateway}};
 \node[above right=of gateway] (delta) {\textbf{Delta API}};
 \node[right=of gateway] (kropyva) {\textbf{Kropyva Interface}};
 \node[below right=of gateway] (link16) {\textbf{Link 16 / JREAP}};
 \node[below=of gateway] (gisarta) {\textbf{GIS Arta UDP API}};
-\draw[->] (drone) -- node[above] {Данные, цели, изображения} (gateway);
+\draw[->] (drone) -- node[above] {Data, targets, images} (gateway);
 \draw[->] (gateway) -- (delta);
 \draw[->] (gateway) -- (kropyva);
 \draw[->] (gateway) -- (link16);
@@ -83,9 +85,9 @@
 \end{tikzpicture}
 \end{center}
 
-\subsection{Примеры API-запросов}
+\subsection{API Request Examples}
 
-\paragraph{Delta API --- JSON REST пример:}
+\paragraph{Delta API --- JSON REST example:}
 \begin{verbatim}
 POST /api/v1/targets HTTP/1.1
 Host: delta.local
@@ -102,7 +104,7 @@ Authorization: Bearer <token>
 }
 \end{verbatim}
 
-\paragraph{Kropyva --- передача координат в формате UTM:}
+\paragraph{Kropyva --- coordinate transmission in UTM format:}
 \begin{verbatim}
 {
   "utm_zone": "36N",
@@ -113,7 +115,7 @@ Authorization: Bearer <token>
 }
 \end{verbatim}
 
-\paragraph{GIS Arta --- UDP пакет передачи цели:}
+\paragraph{GIS Arta --- UDP target transmission packet:}
 \begin{verbatim}
 HEADER: ARTOS
 PAYLOAD:
@@ -125,7 +127,7 @@ PAYLOAD:
 }
 \end{verbatim}
 
-\paragraph{Link 16 / JREAP-C --- конвертация целевых координат:}
+\paragraph{Link 16 / JREAP-C --- target coordinate conversion:}
 \begin{verbatim}
 [TargetReport]
 ID = 9032
@@ -139,7 +141,8 @@ TimeStamp = UTC2025-06-15T12:05:32Z
 \newpage
 
 % PART II: NAVIGATION TECHNOLOGIES
-\part{Navigation Technologies in RF Jamming Environments}
+\section*{Part II: Navigation Technologies in RF Jamming Environments}
+\addcontentsline{toc}{section}{Part II: Navigation Technologies in RF Jamming Environments}
 
 \section{Introduction}
 Swarm drone UAVs operating in RF jamming environments require robust navigation technologies to maintain coordination and functionality, as traditional RF-based systems like GPS are unreliable. This document details nine key technologies used for navigation in such conditions: Inertial Navigation Systems (INS), Visual-Inertial Odometry (VIO), Ultra-Wideband (UWB) Localization, LiDAR-Based SLAM, Optical Flow Sensors, Acoustic/Ultrasonic Sensing, Edge AI and Onboard Processing, Magnetic Navigation, and Decentralized Swarm Algorithms. These technologies are compared in a table, and their integration is visualized in an action diagram.
@@ -168,22 +171,30 @@ The table below compares the navigation technologies based on their primary use,
     \hline
     \textbf{Technology} & \textbf{Primary Use} & \textbf{Frequency Band} & \textbf{Technical Capabilities} \\
     \hline
+    \endfirsthead
+    \hline
+    \textbf{Technology} & \textbf{Primary Use} & \textbf{Frequency Band} & \textbf{Technical Capabilities} \\
+    \hline
     \endhead
-    Inertial Navigation Systems (INS) & Position, orientation, and velocity estimation & None (sensor-based) & High accuracy over short durations (0.1–1 m error after 1 min); prone to drift over time; requires periodic correction; lightweight (50–500 g). \\
     \hline
-    Visual-Inertial Odometry (VIO) & Motion tracking and localization & None (camera-based) & High precision (0.1–0.5 m) in well-lit, textured environments; computationally intensive; limited by camera range (5–50 m); robust to RF jamming. \\
+    \endfoot
     \hline
-    Ultra-Wideband (UWB) Localization & Relative positioning among drones & 3.1–10.6 GHz & Sub-meter accuracy (10–30 cm); short range (10–100 m); low power (0.1–1 W); resistant to multipath and jamming; requires line-of-sight. \\
+    \endlastfoot
+    Inertial Navigation Systems (INS) & Position, orientation, and velocity estimation & None (sensor-based) & High accuracy over short durations (0.1--1 m error after 1 min); prone to drift over time; requires periodic correction; lightweight (50--500 g). \\
     \hline
-    LiDAR-Based SLAM & 3D mapping and localization & None (laser-based) & High accuracy (1–10 cm); effective in complex environments; long range (10–200 m); high computational load; costly and heavy (0.5–5 kg). \\
+    Visual-Inertial Odometry (VIO) & Motion tracking and localization & None (camera-based) & High precision (0.1--0.5 m) in well-lit, textured environments; computationally intensive; limited by camera range (5--50 m); robust to RF jamming. \\
     \hline
-    Optical Flow Sensors & Velocity estimation and hover control & None (camera-based) & Good for low-altitude flight (0.5–10 m); accuracy of 1–5 cm/s; sensitive to lighting and surface texture; lightweight (10–100 g). \\
+    Ultra-Wideband (UWB) Localization & Relative positioning among drones & 3.1--10.6 GHz & Sub-meter accuracy (10--30 cm); short range (10--100 m); low power (0.1--1 W); resistant to multipath and jamming; requires line-of-sight. \\
     \hline
-    Acoustic/Ultrasonic Sensing & Obstacle detection and short-range coordination & 20–40 kHz & Short range (1–10 m); accuracy of 1–5 cm; unaffected by RF jamming; sensitive to environmental noise and wind. \\
+    LiDAR-Based SLAM & 3D mapping and localization & None (laser-based) & High accuracy (1--10 cm); effective in complex environments; long range (10--200 m); high computational load; costly and heavy (0.5--5 kg). \\
     \hline
-    Edge AI and Onboard Processing & Autonomous decision-making and sensor fusion & None (software-based) & Enables real-time processing; supports complex algorithms (e.g., Kalman filters); requires high computational power (1–10 W); scalable for swarm coordination. \\
+    Optical Flow Sensors & Velocity estimation and hover control & None (camera-based) & Good for low-altitude flight (0.5--10 m); accuracy of 1--5 cm/s; sensitive to lighting and surface texture; lightweight (10--100 g). \\
     \hline
-    Magnetic Navigation & Orientation estimation & None (magnetic-based) & Low accuracy (1–5° error); long-range applicability; immune to RF jamming; susceptible to magnetic interference; lightweight (10–50 g). \\
+    Acoustic/Ultrasonic Sensing & Obstacle detection and short-range coordination & 20--40 kHz & Short range (1--10 m); accuracy of 1--5 cm; unaffected by RF jamming; sensitive to environmental noise and wind. \\
+    \hline
+    Edge AI and Onboard Processing & Autonomous decision-making and sensor fusion & None (software-based) & Enables real-time processing; supports complex algorithms (e.g., Kalman filters); requires high computational power (1--10 W); scalable for swarm coordination. \\
+    \hline
+    Magnetic Navigation & Orientation estimation & None (magnetic-based) & Low accuracy (1--5° error); long-range applicability; immune to RF jamming; susceptible to magnetic interference; lightweight (10--50 g). \\
     \hline
     Decentralized Swarm Algorithms & Swarm coordination and navigation & Varies (e.g., UWB, optical) & Enables peer-to-peer coordination; fault-tolerant; reduces reliance on centralized control; depends on local sensor range and communication reliability. \\
     \hline
@@ -247,18 +258,18 @@ The action diagram below illustrates how a swarm drone integrates these navigati
     \label{fig:action_diagram}
 \end{figure}
 
-\section{Заключение}
+\section{Conclusion}
 
-Объединённая система роевых дронов представляет собой комплексное решение, включающее как интеграцию с существующими военными системами НАТО и ВСУ, так и передовые технологии навигации в условиях радиоэлектронного подавления. Трёхуровневая иерархическая архитектура обеспечивает надёжность и масштабируемость, а множественные технологии навигации гарантируют автономность и эффективность работы в сложных боевых условиях.
+The integrated swarm drone system represents a comprehensive solution that includes both integration with existing NATO and AFU military systems and advanced navigation technologies for radio electronic jamming conditions. The three-level hierarchical architecture ensures reliability and scalability, while multiple navigation technologies guarantee autonomy and operational efficiency in complex combat conditions.
 
-Ключевые преимущества системы:
+Key system advantages:
 \begin{itemize}
-    \item Устойчивость к радиоэлектронному подавлению через использование альтернативных методов связи и навигации
-    \item Совместимость с существующими системами командования и управления
-    \item Автономность принятия решений на уровне роя
-    \item Масштабируемость от малых тактических групп до крупных операций
+    \item Resistance to radio electronic jamming through use of alternative communication and navigation methods
+    \item Compatibility with existing command and control systems
+    \item Autonomous decision-making at the swarm level
+    \item Scalability from small tactical groups to large operations
 \end{itemize}
 
-Документ готов к компиляции и дальнейшему расширению функциональности системы.
+The document is ready for compilation and further expansion of system functionality.
 
 \end{document}
