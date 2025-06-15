@@ -54,4 +54,78 @@
 
 Документ завершён. Все блоки LaTeX корректно открыты и закрыты. Готов к компиляции и расширению. При необходимости можно добавить блоки с кодом API, архитектурными схемами и примерами взаимодействия с боевыми системами.
 
+
+% --- BEGIN GATEWAY SECTION ---
+\section*{Архитектура шлюзов и API-взаимодействие}
+\subsection*{Схема шлюзовой архитектуры}
+\begin{center}
+\begin{tikzpicture}[node distance=2.5cm, every node/.style={draw, align=center, minimum width=3.5cm, minimum height=1.2cm}]
+\node (drone) {\textbf{Командный дрон (Ур. 1)}};
+\node[right=of drone] (gateway) {\textbf{Универсальный шлюз}};
+\node[above right=of gateway] (delta) {\textbf{Delta API}};
+\node[right=of gateway] (kropyva) {\textbf{Kropyva Interface}};
+\node[below right=of gateway] (link16) {\textbf{Link 16 / JREAP}};
+\node[below=of gateway] (gisarta) {\textbf{GIS Arta UDP API}};
+\draw[->] (drone) -- node[above] {Данные, цели, изображения} (gateway);
+\draw[->] (gateway) -- (delta);
+\draw[->] (gateway) -- (kropyva);
+\draw[->] (gateway) -- (link16);
+\draw[->] (gateway) -- (gisarta);
+\end{tikzpicture}
+\end{center}
+
+\subsection*{Примеры API-запросов}
+
+\paragraph{Delta API — JSON REST пример:}
+\begin{verbatim}
+POST /api/v1/targets HTTP/1.1
+Host: delta.local
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+  "target_id": "drone_4231",
+  "lat": 48.3794,
+  "lon": 31.1656,
+  "type": "vehicle",
+  "confidence": 0.92,
+  "source": "swarm_uav"
+}
+\end{verbatim}
+
+\paragraph{Kropyva — передача координат в формате UTM:}
+\begin{verbatim}
+{
+  "utm_zone": "36N",
+  "easting": 345210,
+  "northing": 5032123,
+  "target_type": "infantry",
+  "accuracy_m": 10
+}
+\end{verbatim}
+
+\paragraph{GIS Arta — UDP пакет передачи цели:}
+\begin{verbatim}
+HEADER: ARTOS
+PAYLOAD:
+{
+  "id": "obj_101",
+  "coordinates": [48.40, 31.12],
+  "classification": "tank",
+  "priority": 1
+}
+\end{verbatim}
+
+\paragraph{Link 16 / JREAP-C — конвертация целевых координат:}
+\begin{verbatim}
+[TargetReport]
+ID = 9032
+Latitude = 48.3794
+Longitude = 31.1656
+TrackQuality = 5
+Classification = GroundVehicle
+TimeStamp = UTC2025-06-15T12:05:32Z
+\end{verbatim}
+
+% --- END GATEWAY SECTION ---
 \end{document}
